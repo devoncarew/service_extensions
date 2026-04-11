@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-
 /// A description of a service extension.
 class ServiceDescription {
   /// The name of the service extension (e.g. `ext.slipstream.ping`).
@@ -31,23 +29,6 @@ class ServiceDescription {
       'parameters': parameters.map((p) => p.toJson()).toList(),
     };
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ServiceDescription &&
-          runtimeType == other.runtimeType &&
-          name == other.name &&
-          description == other.description &&
-          returns == other.returns &&
-          const ListEquality().equals(parameters, other.parameters);
-
-  @override
-  int get hashCode =>
-      name.hashCode ^
-      description.hashCode ^
-      returns.hashCode ^
-      const ListEquality().hash(parameters);
 }
 
 /// A description of a service extension parameter.
@@ -79,18 +60,4 @@ class ParameterDescription {
       'required': required,
     };
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ParameterDescription &&
-          runtimeType == other.runtimeType &&
-          name == other.name &&
-          type == other.type &&
-          description == other.description &&
-          required == other.required;
-
-  @override
-  int get hashCode =>
-      name.hashCode ^ type.hashCode ^ description.hashCode ^ required.hashCode;
 }
