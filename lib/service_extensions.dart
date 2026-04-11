@@ -6,10 +6,10 @@
 ///
 /// Use [ServiceDescription] to describe your extension and its parameters.
 ///
-/// Inside the handler, use the [ExtensionParameters] object to extract
+/// Inside the handler, use the [ServiceExtensionParameters] object to extract
 /// parameters in a type-safe way.
 library;
 
 export 'src/api.dart';
-export 'src/call_support.dart' show ExtensionParameters;
-export 'src/registery.dart' show registerServiceExtension, registeredExtensions;
+export 'src/call_support.dart' show ServiceExtensionParameters;
+export 'src/registry.dart' show registerServiceExtension, registeredExtensions;

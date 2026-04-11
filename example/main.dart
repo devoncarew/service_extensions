@@ -1,3 +1,5 @@
+// To run this example, use `dart run --observe example/main.dart`.
+
 import 'package:service_extensions/service_extensions.dart';
 
 void main() {

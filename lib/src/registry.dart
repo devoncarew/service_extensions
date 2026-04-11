@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert' show jsonEncode;
 import 'dart:developer';
 
@@ -8,22 +9,22 @@ final List<ServiceDescription> _registeredExtensions = [];
 
 /// Return a list of all registered service extensions.
 List<ServiceDescription> get registeredExtensions =>
-    List.unmodifiable(_registeredExtensions);
+    UnmodifiableListView(_registeredExtensions);
 
 /// Register a service extension.
 void registerServiceExtension(
   ServiceDescription description,
-  Future<Object?> Function(ExtensionParameters parameters) handler,
+  Future<Object?> Function(ServiceExtensionParameters parameters) handler,
 ) {
   // Bootstrap the discovery mechanism.
-  initDiscoveryRegistery();
+  initDiscoveryRegistry();
 
   _registeredExtensions.add(description);
 
   registerExtension(description.name, (method, parameters) async {
     try {
       final result =
-          await handler(ExtensionParameters(parameters, method: method));
+          await handler(ServiceExtensionParameters(parameters, method: method));
       return ServiceExtensionResponse.result(jsonEncode(result));
     } on ServiceExtensionResponse catch (e) {
       if (e.isError()) {
@@ -43,15 +44,15 @@ void registerServiceExtension(
   });
 }
 
-bool _registeryInitialized = false;
+bool _registryInitialized = false;
 
 /// Register a service extension that returns all available service extensions
 /// and their metadata.
 ///
 /// This can safely be called multiple times.
-void initDiscoveryRegistery() {
-  if (_registeryInitialized) return;
-  _registeryInitialized = true;
+void initDiscoveryRegistry() {
+  if (_registryInitialized) return;
+  _registryInitialized = true;
 
   registerServiceExtension(
     ServiceDescription(

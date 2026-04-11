@@ -1,7 +1,10 @@
 name: service_extensions
+version: 0.1.0
 description: >-
   A package to add type safety and a discovery service to VM service extensions.
-version: 0.1.0
+
+repository: https://github.com/devoncarew/service_extensions
+
 environment:
   sdk: ^3.3.0
 
