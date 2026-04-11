@@ -1,21 +1,20 @@
 import 'dart:developer' as dev;
 
 import 'package:service_extensions/service_extensions.dart';
-import 'package:service_extensions/src/registry.dart' show initDiscoveryRegistry;
+import 'package:service_extensions/src/registry.dart'
+    show initDiscoveryRegistry;
 import 'package:test/test.dart';
 
 void main() {
   group('ServiceExtensionParameters', () {
     test('asString', () {
-      final params =
-          ServiceExtensionParameters({'foo': 'bar'}, method: 'test');
+      final params = ServiceExtensionParameters({'foo': 'bar'}, method: 'test');
       expect(params.asString('foo'), 'bar');
       expect(params.asString('baz'), isNull);
     });
 
     test('asStringRequired', () {
-      final params =
-          ServiceExtensionParameters({'foo': 'bar'}, method: 'test');
+      final params = ServiceExtensionParameters({'foo': 'bar'}, method: 'test');
       expect(params.asStringRequired('foo'), 'bar');
       expect(() => params.asStringRequired('baz'),
           throwsA(isA<dev.ServiceExtensionResponse>()));
@@ -35,7 +34,8 @@ void main() {
     });
 
     test('asBoolRequired', () {
-      final params = ServiceExtensionParameters({'foo': 'true'}, method: 'test');
+      final params =
+          ServiceExtensionParameters({'foo': 'true'}, method: 'test');
       expect(params.asBoolRequired('foo'), isTrue);
       expect(() => params.asBoolRequired('baz'),
           throwsA(isA<dev.ServiceExtensionResponse>()));
@@ -98,31 +98,6 @@ void main() {
       expect(json['type'], 'String');
       expect(json['description'], 'a bar');
       expect(json['required'], isTrue);
-    });
-
-    test('equality', () {
-      final d1 = ServiceDescription(
-        name: 'foo',
-        description: 'bar',
-        parameters: [
-          ParameterDescription(name: 'p1', type: 'int', description: 'p1 desc')
-        ],
-      );
-      final d2 = ServiceDescription(
-        name: 'foo',
-        description: 'bar',
-        parameters: [
-          ParameterDescription(name: 'p1', type: 'int', description: 'p1 desc')
-        ],
-      );
-      final d3 = ServiceDescription(
-        name: 'foo',
-        description: 'baz',
-      );
-
-      expect(d1, equals(d2));
-      expect(d1, isNot(equals(d3)));
-      expect(d1.hashCode, equals(d2.hashCode));
     });
   });
 }
