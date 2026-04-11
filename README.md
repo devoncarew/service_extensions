@@ -56,7 +56,7 @@ void main() {
 
 ### Type-safe Parameters
 
-Use the `ExtensionParameters` object to safely extract parameters:
+Use the `ServiceExtensionParameters` object to safely extract parameters:
 
 ```dart
 (parameters) async {
