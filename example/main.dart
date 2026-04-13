@@ -8,13 +8,18 @@ void main() {
     ServiceDescription(
       name: 'ext.myapp.ping',
       description: 'Check if the app is responsive.',
-      returns: 'A JSON object with a status message.',
       parameters: [
         ParameterDescription(
           name: 'message',
           type: 'String',
           description: 'An optional message to echo back.',
         ),
+      ],
+      returns: [
+        ReturnDescription(
+            name: 'status',
+            type: 'String',
+            description: 'The returned message.')
       ],
     ),
     (parameters) async {
@@ -28,7 +33,6 @@ void main() {
     ServiceDescription(
       name: 'ext.myapp.calculate',
       description: 'Perform a simple calculation.',
-      returns: 'The result of the calculation.',
       parameters: [
         ParameterDescription(
           name: 'a',
@@ -50,27 +54,32 @@ void main() {
               'defaults to add.',
         ),
       ],
+      returns: [
+        ReturnDescription(
+            name: 'result',
+            type: 'int',
+            description: 'The result of the calculation.')
+      ],
     ),
     (parameters) async {
       final a = parameters.asIntRequired('a');
       final b = parameters.asIntRequired('b');
       final operation = parameters.asString('operation') ?? 'add';
 
-      switch (operation) {
-        case 'add':
-          return a + b;
-        case 'subtract':
-          return a - b;
-        case 'multiply':
-          return a * b;
-        case 'divide':
-          return a / b;
-        default:
-          throw ArgumentError('Unknown operation: $operation');
-      }
+      int result = switch (operation) {
+        'add' => a + b,
+        'subtract' => a - b,
+        'multiply' => a * b,
+        'divide' => (a / b).round(),
+        _ => throw ArgumentError('Unknown operation: $operation')
+      };
+
+      return {'result': result};
     },
   );
 
-  print('Extensions registered. You can now use the VM service to call them.');
-  print('Try calling ext.service_extensions.getExtensions to see metadata.');
+  print('Extensions registered!');
+  print('You can now use the VM service to call them.');
+  print('');
+  print('Try calling ext.service_extensions.list to see metadata.');
 }

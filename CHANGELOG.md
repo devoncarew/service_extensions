@@ -1,4 +1,15 @@
-# Changelog
+## 0.2.0
+
+- **Breaking Change**: Renamed `ServiceExtensionParameters` to `ExtensionParameters`.
+- **Breaking Change**: Renamed the self-discovery extension from
+  `ext.service_extensions.getExtensions` to `ext.service_extensions.list`.
+- **Breaking Change**: `ServiceDescription` now uses a list of
+  `ReturnDescription` objects instead of a single `String? returns` field.
+- **Breaking Change**: `registerServiceExtension` now requires handlers to
+  return a `Map<String, Object?>`.
+- Added `ReturnDescription` to provide structured metadata for service extension
+  return values.
+- Updated documentation and examples.
 
 ## 0.1.0
 

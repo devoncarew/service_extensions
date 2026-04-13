@@ -11,5 +11,5 @@
 library;
 
 export 'src/api.dart';
-export 'src/call_support.dart' show ServiceExtensionParameters;
+export 'src/call_support.dart' show ExtensionParameters;
 export 'src/registry.dart' show registerServiceExtension, registeredExtensions;

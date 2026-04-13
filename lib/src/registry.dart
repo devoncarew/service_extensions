@@ -5,6 +5,9 @@ import 'dart:developer';
 import 'api.dart';
 import 'call_support.dart';
 
+typedef ServiceHandler = Future<Map<String, Object?>> Function(
+    ExtensionParameters parameters);
+
 final List<ServiceDescription> _registeredExtensions = [];
 
 /// Return a list of all registered service extensions.
@@ -14,7 +17,7 @@ List<ServiceDescription> get registeredExtensions =>
 /// Register a service extension.
 void registerServiceExtension(
   ServiceDescription description,
-  Future<Object?> Function(ServiceExtensionParameters parameters) handler,
+  ServiceHandler handler,
 ) {
   // Bootstrap the discovery mechanism.
   initDiscoveryRegistry();
@@ -24,7 +27,7 @@ void registerServiceExtension(
   registerExtension(description.name, (method, parameters) async {
     try {
       final result =
-          await handler(ServiceExtensionParameters(parameters, method: method));
+          await handler(ExtensionParameters(parameters, method: method));
       return ServiceExtensionResponse.result(jsonEncode(result));
     } on ServiceExtensionResponse catch (e) {
       if (e.isError()) {
@@ -56,13 +59,18 @@ void initDiscoveryRegistry() {
 
   registerServiceExtension(
     ServiceDescription(
-      name: 'ext.service_extensions.getExtensions',
-      description:
-          'Returns all available service extensions and their metadata.',
-      returns: 'A JSON-encoded list of service extension descriptions.',
+      name: 'ext.service_extensions.list',
+      description: 'Returns registered service extensions and their metadata.',
+      returns: [
+        ReturnDescription(
+            name: 'extensions',
+            description: 'A list of service extension descriptions.')
+      ],
     ),
     (parameters) async {
-      return registeredExtensions.map((e) => e.toJson()).toList();
+      return {
+        'extensions': registeredExtensions.map((e) => e.toJson()).toList()
+      };
     },
   );
 }

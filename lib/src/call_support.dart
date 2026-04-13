@@ -1,14 +1,14 @@
 import 'dart:developer';
 
 /// A class for extracting and validating service extension parameters.
-class ServiceExtensionParameters {
+class ExtensionParameters {
   /// The name of the service extension method being called.
   final String method;
 
   /// The raw parameters provided by the VM service.
   final Map<String, String> parameters;
 
-  ServiceExtensionParameters(this.parameters, {required this.method});
+  ExtensionParameters(this.parameters, {required this.method});
 
   /// Return the named parameter as a `String?`; this always succeeds.
   String? asString(String name) => parameters[name];
