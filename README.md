@@ -19,7 +19,7 @@ The `service_extensions` package addresses these issues by:
 
 - **Type-safe Parameter Extraction**: Easily parse `int`, `bool`, `double`, and `String` parameters, with built-in validation and clear error messages for missing or malformed values.
 - **Service Registry**: Automatically tracks all registered extensions and their descriptions.
-- **Self-discovery**: Exposes a `ext.service_extensions.getExtensions` extension that returns metadata for all extensions registered through this package.
+- **Self-discovery**: Exposes a `ext.service_extensions.list` extension that returns metadata for all extensions registered through this package.
 - **Unified Error Handling**: Automatically catches exceptions and returns them as properly formatted `ServiceExtensionResponse` errors.
 
 ## Usage
@@ -34,18 +34,23 @@ import 'package:service_extensions/service_extensions.dart';
 void main() {
   registerServiceExtension(
     ServiceDescription(
-      name: 'ext.myapp.ping',
-      description: 'Check if the app is responsive.',
-      returns: 'A JSON object with a status message.',
-      parameters: [
-        ParameterDescription(
-          name: 'message',
-          type: 'String',
-          description: 'An optional message to echo back.',
-          required: false,
-        ),
-      ],
-    ),
+        name: 'ext.myapp.ping',
+        description: 'Check if the app is responsive.',
+        parameters: [
+          ParameterDescription(
+            name: 'message',
+            type: 'String',
+            description: 'An optional message to echo back.',
+            required: false,
+          ),
+        ],
+        returns: [
+          ReturnDescription(
+            name: 'status',
+            type: 'String',
+            description: 'The status message.',
+          )
+        ]),
     (parameters) async {
       final message = parameters.asString('message') ?? 'pong';
       return {'status': 'ok', 'message': message};
@@ -76,7 +81,7 @@ Use the `ServiceExtensionParameters` object to safely extract parameters:
 ### Discovery
 
 Once you've registered at least one extension using this package, you can call
-`ext.service_extensions.getExtensions` via the VM service protocol to get a list
+`ext.service_extensions.list` via the VM service protocol to get a list
 of all registered extensions and their metadata.
 
 Example response:
@@ -84,21 +89,31 @@ Example response:
 ```json
 [
   {
-    "name": "ext.service_extensions.getExtensions",
+    "name": "ext.service_extensions.list",
     "description": "Returns all available service extensions and their metadata.",
-    "returns": "A JSON-encoded list of service extension descriptions.",
-    "parameters": []
+    "parameters": [],
+    "returns": [
+      {
+        "name": "extensions",
+        "description": "A list of service extension descriptions."
+      }
+    ]
   },
   {
     "name": "ext.myapp.ping",
     "description": "Check if the app is responsive.",
-    "returns": "A JSON object with a status message.",
     "parameters": [
       {
         "name": "message",
         "type": "String",
         "description": "An optional message to echo back.",
         "required": false
+      }
+    ],
+    "returns": [
+      {
+        "name": "status",
+        "description": "The status message."
       }
     ]
   }

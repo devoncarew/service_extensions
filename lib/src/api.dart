@@ -6,27 +6,29 @@ class ServiceDescription {
   /// A description of the service extension.
   final String description;
 
-  /// A description of the return value.
-  ///
-  /// A null value here implies no return result / 'void'.
-  final String? returns;
-
   /// The parameters supported by the service extension.
   final List<ParameterDescription> parameters;
+
+  /// Descriptions of the fields in the Map return value.
+  ///
+  /// An empty list here implies no return result / 'void'.
+  final List<ReturnDescription> returns;
 
   ServiceDescription({
     required this.name,
     required this.description,
-    this.returns,
     this.parameters = const [],
+    this.returns = const [],
   });
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'description': description,
-      if (returns != null) 'returns': returns,
-      'parameters': parameters.map((p) => p.toJson()).toList(),
+      if (parameters.isNotEmpty)
+        'parameters': parameters.map((p) => p.toJson()).toList(),
+      if (returns.isNotEmpty)
+        'returns': returns.map((p) => p.toJson()).toList(),
     };
   }
 }
@@ -57,7 +59,31 @@ class ParameterDescription {
       'name': name,
       'type': type,
       'description': description,
-      'required': required,
+      if (required) 'required': required,
+    };
+  }
+}
+
+class ReturnDescription {
+  /// The name of the return value - the field in the returned map.
+  final String name;
+
+  /// A description of the return value.
+  final String description;
+
+  /// The optional type of the return value.
+  ///
+  /// Populate this if the return value maps to a simple type (e.g. `String`,
+  /// `int`, `bool`).
+  final String? type;
+
+  ReturnDescription({required this.name, required this.description, this.type});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'description': description,
+      if (type != null) 'type': type,
     };
   }
 }

@@ -1,5 +1,5 @@
 name: service_extensions
-version: 0.1.0
+version: 0.2.0
 description: >-
   A package to add type safety and a discovery service to VM service extensions.
 
@@ -11,3 +11,4 @@ environment:
 dev_dependencies:
   lints: ^6.0.0
   test: ^1.31.0
+  vm_service: ^15.0.0
